@@ -120,6 +120,30 @@ int msgpack_pack_object(msgpack_packer* pk, msgpack_object d)
             }
         }
 
+    case MSGPACK_OBJECT_FIX_UINT8:
+        return msgpack_pack_fix_uint8(pk, (uint8_t)d.via.u64);
+
+    case MSGPACK_OBJECT_FIX_UINT16:
+        return msgpack_pack_fix_uint16(pk, (uint16_t)d.via.u64);
+
+    case MSGPACK_OBJECT_FIX_UINT32:
+        return msgpack_pack_fix_uint32(pk, (uint32_t)d.via.u64);
+
+    case MSGPACK_OBJECT_FIX_UINT64:
+        return msgpack_pack_fix_uint64(pk, (uint64_t)d.via.u64);
+
+    case MSGPACK_OBJECT_FIX_INT8:
+        return msgpack_pack_fix_int8(pk, (int8_t)d.via.i64);
+
+    case MSGPACK_OBJECT_FIX_INT16:
+        return msgpack_pack_fix_int16(pk, (int16_t)d.via.i64);
+
+    case MSGPACK_OBJECT_FIX_INT32:
+        return msgpack_pack_fix_int32(pk, (int32_t)d.via.i64);
+
+    case MSGPACK_OBJECT_FIX_INT64:
+        return msgpack_pack_fix_int64(pk, (int64_t)d.via.i64);
+
     default:
         return -1;
     }
@@ -153,6 +177,10 @@ void msgpack_object_print(FILE* out, msgpack_object o)
         break;
 
     case MSGPACK_OBJECT_POSITIVE_INTEGER:
+    case MSGPACK_OBJECT_FIX_UINT8:
+    case MSGPACK_OBJECT_FIX_UINT16:
+    case MSGPACK_OBJECT_FIX_UINT32:
+    case MSGPACK_OBJECT_FIX_UINT64:
 #if defined(PRIu64)
         fprintf(out, "%" PRIu64, o.via.u64);
 #else
@@ -164,6 +192,10 @@ void msgpack_object_print(FILE* out, msgpack_object o)
         break;
 
     case MSGPACK_OBJECT_NEGATIVE_INTEGER:
+    case MSGPACK_OBJECT_FIX_INT8:
+    case MSGPACK_OBJECT_FIX_INT16:
+    case MSGPACK_OBJECT_FIX_INT32:
+    case MSGPACK_OBJECT_FIX_INT64:
 #if defined(PRIi64)
         fprintf(out, "%" PRIi64, o.via.i64);
 #else
@@ -299,6 +331,10 @@ int msgpack_object_print_buffer(char *buffer, size_t buffer_size, msgpack_object
         break;
 
     case MSGPACK_OBJECT_POSITIVE_INTEGER:
+    case MSGPACK_OBJECT_FIX_UINT8:
+    case MSGPACK_OBJECT_FIX_UINT16:
+    case MSGPACK_OBJECT_FIX_UINT32:
+    case MSGPACK_OBJECT_FIX_UINT64:
 #if defined(PRIu64)
         MSGPACK_CHECKED_CALL(ret, snprintf, aux_buffer, aux_buffer_size, "%" PRIu64, o.via.u64);
 #else
@@ -311,6 +347,10 @@ int msgpack_object_print_buffer(char *buffer, size_t buffer_size, msgpack_object
         break;
 
     case MSGPACK_OBJECT_NEGATIVE_INTEGER:
+    case MSGPACK_OBJECT_FIX_INT8:
+    case MSGPACK_OBJECT_FIX_INT16:
+    case MSGPACK_OBJECT_FIX_INT32:
+    case MSGPACK_OBJECT_FIX_INT64:
 #if defined(PRIi64)
         MSGPACK_CHECKED_CALL(ret, snprintf, aux_buffer, aux_buffer_size, "%" PRIi64, o.via.i64);
 #else
@@ -418,9 +458,17 @@ bool msgpack_object_equal(const msgpack_object x, const msgpack_object y)
         return x.via.boolean == y.via.boolean;
 
     case MSGPACK_OBJECT_POSITIVE_INTEGER:
+    case MSGPACK_OBJECT_FIX_UINT8:
+    case MSGPACK_OBJECT_FIX_UINT16:
+    case MSGPACK_OBJECT_FIX_UINT32:
+    case MSGPACK_OBJECT_FIX_UINT64:
         return x.via.u64 == y.via.u64;
 
     case MSGPACK_OBJECT_NEGATIVE_INTEGER:
+    case MSGPACK_OBJECT_FIX_INT8:
+    case MSGPACK_OBJECT_FIX_INT16:
+    case MSGPACK_OBJECT_FIX_INT32:
+    case MSGPACK_OBJECT_FIX_INT64:
         return x.via.i64 == y.via.i64;
 
     case MSGPACK_OBJECT_FLOAT32:
